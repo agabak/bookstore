@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace bookstore.DataAccess.AppContext
 {
-    public class AppContext: IdentityDbContext<AppUser>
+    public class DataContext: IdentityDbContext<AppUser>
     {
-        public AppContext(DbContextOptions<AppContext> options): base(options)
+        public DataContext(DbContextOptions<DataContext> options): base(options)
         {
         }
 

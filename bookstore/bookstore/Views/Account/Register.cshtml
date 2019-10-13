@@ -1,0 +1,70 @@
+﻿@model RegisterViewModel
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <form asp-action="Register" asp-controller="Account">
+                <div asp-validation-summary="ModelOnly" class="text-warning"></div>
+                <div class="form-group">
+                    <div class="form-group">
+                        <label asp-for="Username"></label>
+                        <input asp-for="Username" class="form-control" />
+                        <span asp-validation-for="Username" class="text-warning"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-group">
+                        <label asp-for="FirstName"></label>
+                        <input asp-for="FirstName" class="form-control" />
+                        <span asp-validation-for="FirstName" class="text-warning"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-group">
+                        <label asp-for="LastName"></label>
+                        <input asp-for="LastName" class="form-control" />
+                        <span asp-validation-for="LastName" class="text-warning"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-group">
+                        <label asp-for="Password"></label>
+                        <input asp-for="Password" class="form-control" />
+                        <span asp-validation-for="Password" class="text-warning"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-group">
+                        <label asp-for="PasswordConfirm"></label>
+                        <input asp-for="PasswordConfirm" class="form-control" />
+                        <span asp-validation-for="PasswordConfirm" class="text-warning"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-group">
+                        <label asp-for="Email"></label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-warning"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-group">
+                        <label asp-for="EmailConfirm"></label>
+                        <input asp-for="EmailConfirm" class="form-control" />
+                        <span asp-validation-for="EmailConfirm" class="text-warning"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-group">
+                        <label asp-for="Phonenumber"></label>
+                        <input asp-for="Phonenumber" class="form-control" />
+                        <span asp-validation-for="Phonenumber" class="text-warning"></span>
+                    </div>
+                </div>
+                <a class="btn btn-primary">Cancel</a>
+                <button type="submit" class="btn btn-success">Save</button>
+            </form>
+        </div>
+    </div>
+</div>
+
