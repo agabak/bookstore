@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using bookstore.Entities;
 using bookstore.ViewModels;
@@ -40,22 +38,24 @@ namespace bookstore.Controllers
             var user =  await _userManage.FindByNameAsync(login.UserName);
             if (user == null) return RedirectToAction("Register", "Account");
 
-            if (!this.User.Identity.IsAuthenticated)
+            var returnUrl = Request.Query.Keys.Contains("ReturnUrl")? Request.Query.Keys.First() : string.Empty;
+
+            if (this.User.Identity.IsAuthenticated)
             {
+                if (string.IsNullOrEmpty(returnUrl)) return RedirectToAction("Register", "Account");
+
+                return Redirect(returnUrl);
+
+            }
                 var signIn = await _signInManager
                                     .PasswordSignInAsync(login.UserName, login.Password, login.RememberMe, false);
                 if(signIn.Succeeded)
                 {
-                    if (Request.Query.Keys.Contains("ReturnUrl"))
-                    {
-                        return Redirect(Request.Query.Keys.First());
-                    }
-                    else
-                    {
-                        return RedirectToAction("Index", "Home");
-                    }
+                    if(string.IsNullOrEmpty(returnUrl)) return RedirectToAction("Index", "Home");
+      
+                      return Redirect(Request.Query.Keys.First());  
                 }   
-            }
+            
             ModelState.AddModelError("", "Fail to login");
             return View();
         }
@@ -84,17 +84,22 @@ namespace bookstore.Controllers
 
             if(result.Succeeded)
             {
-                if (Request.Query.Keys.Contains("ReturnUrl"))
-                {
-                    return Redirect(Request.Query.Keys.First());
-                }
-                else
-                {
-                    return RedirectToAction("Index", "Home");
-                }
+                var returnUrl = Request.Query.Keys.Contains("ReturnUrl") ? Request.Query.Keys.First() : string.Empty;
+
+                if(string.IsNullOrEmpty(returnUrl)) return RedirectToAction("Index", "Home");
+                  return Redirect(Request.Query.Keys.First());
             }
             ModelState.AddModelError("", "Fail to Register");
             return View();
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            if (this.User.Identity.IsAuthenticated)
+            {
+                await _signInManager.SignOutAsync();
+            }
+            return RedirectToAction("Login", "Account");
         }
     }
 }
