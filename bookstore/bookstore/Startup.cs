@@ -28,8 +28,9 @@ namespace bookstore
             }
 
             app.UseStaticFiles();
-            app.UseRouting();
-
+            app.UseRouting();   // UseAuthorization and UseAuthentication below UseRoute middleware
+            app.UseAuthentication();
+            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
