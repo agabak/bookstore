@@ -33,6 +33,7 @@ namespace bookstore.Controllers
             if (!ModelState.IsValid)
             {
                 ModelState.AddModelError("", "Wrong login information");
+                _logger.LogInformation("Wrong login information");
                 return View();
             }
             var user =  await _userManage.FindByNameAsync(login.UserName);
@@ -90,6 +91,7 @@ namespace bookstore.Controllers
                   return Redirect(Request.Query.Keys.First());
             }
             ModelState.AddModelError("", "Fail to Register");
+            _logger.LogInformation("Fail to Register");
             return View();
         }
 
