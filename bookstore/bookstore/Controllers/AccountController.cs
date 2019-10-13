@@ -1,10 +1,16 @@
-﻿using System.Linq;
+﻿using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using bookstore.Entities;
 using bookstore.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 
 namespace bookstore.Controllers
 {
@@ -13,13 +19,16 @@ namespace bookstore.Controllers
         private readonly ILogger<AccountController> _logger;
         private readonly UserManager<AppUser> _userManage;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly IConfiguration _config;
         public AccountController(ILogger<AccountController> logger, 
                                  UserManager<AppUser> userManager,
-                                 SignInManager<AppUser> signInManager)
+                                 SignInManager<AppUser> signInManager,
+                                 IConfiguration configuration)
         {
             _logger = logger;
             _userManage = userManager;
             _signInManager = signInManager;
+            _config = configuration;
         }
 
         public IActionResult Login()
@@ -102,6 +111,47 @@ namespace bookstore.Controllers
                 await _signInManager.SignOutAsync();
             }
             return RedirectToAction("Login", "Account");
+        }
+        
+        [HttpPost("api/token")]
+        public async  Task<IActionResult>  CreateToken([FromBody] LoginViewModel model)
+        {
+            if(ModelState.IsValid)
+            {
+                var user = await _userManage.FindByNameAsync(model.UserName);
+                if(user != null)
+                {
+                    var result = await _signInManager
+                                       .CheckPasswordSignInAsync(user, model.Password, false);
+
+                    if(result.Succeeded)
+                    {
+                        var claims = new []
+                                    {
+                                        new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+                                        new Claim(JwtRegisteredClaimNames.Jti, new Guid().ToString())
+                                    };
+                        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:key"]));
+                        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
+                        var token = new JwtSecurityToken(
+                             _config["Tokes:Issuer"],
+                             _config["Tokens:Audience"],
+                             claims,
+                             expires: DateTime.UtcNow.AddMinutes(30),
+                            signingCredentials: creds
+                          );
+
+                        var writeToken = new
+                                        {
+                                            token = new JwtSecurityTokenHandler().WriteToken(token),
+                                            exparation = token.ValidTo
+                                        };
+
+                        return Created("",writeToken);
+                    }
+                }
+            }
+            return BadRequest("Fail to create token");
         }
     }
 }

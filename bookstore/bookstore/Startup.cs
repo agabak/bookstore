@@ -12,6 +12,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using bookstore.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace bookstore
 {
@@ -31,6 +33,17 @@ namespace bookstore
                                                         {
                                                             cfg.User.RequireUniqueEmail = true;
                                                         }).AddEntityFrameworkStores<DataContext>();
+            services.AddAuthentication().AddCookie()
+                    .AddJwtBearer(cfg =>
+                    {
+                        var sd = _config["Tokens:Audience"];
+                        cfg.TokenValidationParameters = new TokenValidationParameters()
+                        {
+                            ValidIssuer = _config["Tokens:Issuer"],
+                            ValidAudience = _config["Tokens:Audience"],
+                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:key"]))
+                        };
+                    });
             services.AddControllersWithViews();
         }
 

@@ -1,5 +1,10 @@
 {
   "ConnectionStrings": {
     "DefaultConnection": "Server=(localdb)\\MSSQLLocalDB;Database=bookstore;Trusted_Connection=True;MultipleActiveResultSets=true"
+  },
+  "Tokens": {
+    "key": "8x/A?D(G+KbPeShVkYp3s6v9y$B&E)H@McQfTjWnZq4t7w!z%C*F-JaNdRgUkXp2",
+    "Issuer": "localhost",
+    "Audience": "localhost"
   }
 }

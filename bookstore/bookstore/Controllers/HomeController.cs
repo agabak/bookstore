@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace bookstore.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : Controller 
     {
-        [Authorize]
         public IActionResult Index()
         {
             return View();
