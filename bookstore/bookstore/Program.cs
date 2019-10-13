@@ -18,9 +18,18 @@ namespace bookstore
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
+                 .ConfigureAppConfiguration(SetAppConfiguration)
+                 .ConfigureWebHostDefaults(webBuilder =>
+                 {
                     webBuilder.UseStartup<Startup>();
-                });
+                 });
+
+        private static void SetAppConfiguration(HostBuilderContext ctx, IConfigurationBuilder builder)
+        {
+            builder.Sources.Clear();
+
+            builder.AddJsonFile("config.json")
+                   .AddEnvironmentVariables();
+        }
     }
 }
