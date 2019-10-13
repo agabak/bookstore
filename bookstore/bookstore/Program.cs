@@ -13,7 +13,14 @@ namespace bookstore
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            var host = CreateHostBuilder(args).Build();
+                       RunSeeding(host);
+                       host.Run();
+        }
+
+        private static void RunSeeding(IHost host)
+        {
+
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

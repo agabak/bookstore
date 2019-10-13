@@ -31,7 +31,6 @@ namespace bookstore
                                                         {
                                                             cfg.User.RequireUniqueEmail = true;
                                                         }).AddEntityFrameworkStores<DataContext>();
-
             services.AddControllersWithViews();
         }
 
